@@ -1,0 +1,27 @@
+#include <stdio.h>
+int main()
+{
+	int i,j,n,temp,a[100];
+	printf("please input n:\n");
+	scanf("%d",&n);
+	for(i=0;i<n;i++)
+		scanf("%d",&a[i]);
+
+	for(i=0;i<n-1;i++)
+	{
+		for(j=i+1;j<n-1;j++)  //最后一个数已经被动地和前面所有数进行了比较，不需要主动比较
+		{
+			if(a[i]>=a[j])
+			{
+				temp=a[i];
+				a[i]=a[j];
+				a[j]=temp;
+			}
+		}
+	}
+
+	for(i=0;i<n;i++)
+		printf("%d ",a[i]);
+
+	return 0;
+}
