@@ -1,0 +1,27 @@
+#include<stdio.h>
+int main()
+{	
+  int n,m,i,j,sum,num=0;	
+  scanf("%d %d",&m,&n);	
+  for(i=m;i<=n;i++)
+  {		
+    if(i==1) continue;	//1不是完数 		
+    sum=1;		
+    for(j=2;j<i;j++)	//因子数之和 			
+      if(i%j==0) 
+        sum+=j;		
+      if(sum==i)
+      {		//之和相等，既是完数 			
+         printf("%d = 1",i);	//每一项都有1			
+         for(j=2;j<i;j++)					
+         if(i%j==0) 					
+         printf(" + %d",j);	//之后再加上后面的因子 			
+         printf("\n");			
+         num++;		
+       }	
+    }	
+    if(num==0) 
+      printf("None\n"); //num是用来统计出现的完数个数 	
+      
+    return 0;
+} 
