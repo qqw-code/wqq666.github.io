@@ -1,0 +1,23 @@
+#include<stdio.h>
+
+int main()
+{
+	int i=0, a[10];
+	int num=0,num5[10];
+
+	printf("please input 10 numbers:\n");
+	for(i=0;i<10;i++)
+	{
+		scanf("%d",&a[i]);
+		if(a[i]==5)
+		{
+			num5[num]=i;
+			num++;
+		}
+	}
+	for(i=0;i<num;i++)
+	{
+		printf("下标%d\n",num5[i]);
+	}
+	return 0;
+}
