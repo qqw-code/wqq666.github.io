@@ -1,0 +1,32 @@
+#include <stdio.h>
+#include <math.h>
+
+int PowMod(int n, int p,int mod)
+{	
+	int result = 1;	
+	while (p > 0)	
+	{		
+		if (p % 2 == 1)		
+		{			
+			result = (result*n) % mod;	
+		}	
+		p /= 2;		
+		n = (n*n) % mod;
+	}	
+	printf("%d\n",result);
+	return result;
+}
+int main()
+{
+	int N,P,M;
+	printf("please input N:\n");
+	scanf("%d",&N);
+	printf("please input P:\n");
+	scanf("%d",&P);
+	printf("please input M:\n");
+	scanf("%d",&M);
+
+	PowMod(N,P,M);
+
+	return 0;
+}
