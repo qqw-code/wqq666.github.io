@@ -1,0 +1,66 @@
+题目：输入n(n<50)个学生的成绩信息，再输入一个学生的学号、课程以及成绩，在自定义函数中修改该学生指定课程的成绩。
+
+
+#include <stdio.h>
+struct student{
+	int num;
+	char name[10];
+	int computer,math,english;
+}students[50];                    //定义结构数组
+
+int update_score(struct student *p,int n,int num,int choice,int score);
+
+int main()
+{
+	int i,n,num,choice,score,pos;
+	printf("input n:\n");
+	scanf("%d",&n);
+
+	for(i=0;i<n;i++)
+	{
+		printf("please input the information of No %d:\n",i+1);              //依次输入学生信息
+		scanf("%d %s %d %d %d", &students[i].num, students[i].name, &students[i].computer, &students[i].math, &students[i].english);
+	}
+
+	printf("please input the number of the student to be updated:\n");    //输入要修改的学生信息
+	scanf("%d",&num);
+	printf("choice the course: 1.computer 2.math 3.english\n");
+	scanf("%d",&choice);
+	printf("please input the score you wanna update:\n");
+	scanf("%d",&score);
+	
+  pos=update_score(students,n,num,choice,score);   //调用函数，修改学生成绩
+
+	if(pos==-1)
+		printf("not found!\n");
+	else
+	{
+		printf("After update:\n");
+		printf("%d %s %d %d %d\n", students[pos].num, students[pos].name, students[pos].computer, students[pos].math, students[pos].english);
+	}
+
+	return 0;
+
+
+}
+int update_score(struct student *p,int n,int num,int choice,int score)
+{
+	int i,pos;
+	for(i=0;i<n;i++,p++)
+		if(p->num==num)     //按学号查找
+			break;
+	
+	if(i<n)      //找到，并修改成绩
+	{
+		switch(choice){
+		 case 1: p->computer=score; break;
+		 case 2: p->math=score; break;
+		 case 3: p->english=score; break;
+		}
+		pos=i;    //被修改的下标
+	}
+	else
+		pos=-1;   //无此学号
+
+	return pos;
+}
