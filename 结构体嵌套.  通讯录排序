@@ -1,0 +1,45 @@
+题目：建立一个通讯录，通讯录的结构记录包括：姓名、生日、电话号码；其中生日又包括三项：年、月、日。
+      编写程序，定义一个嵌套的结构类型，输入n(n<10)个联系人的信息，再按他们的年龄从大到小的顺序依次输出其信息。
+#include <stdio.h>
+#include <string.h>
+
+struct birthday{
+	int year,month,day;
+}birth;
+
+struct address{
+	char name[10];
+	char phone[15];
+	struct birthday birth;    //结构体变量的嵌套
+};
+
+
+int main()
+{
+	int i,j,n,index;
+	printf("please input n:\n");
+	scanf("%d",&n);
+
+	struct address p[10],temp;
+	
+	for(i=0;i<n;i++){
+		printf("please input the information of No %d:\n",i+1); 
+		scanf("%s %s %d %d %d", p[i].name, p[i].phone , &p[i].birth.year, &p[i].birth.month, &p[i].birth.day);  //依次输入通讯录信息
+	}
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n-i-1;j++)
+		{
+			if( p[j].birth.year > p[j+1].birth.year)   //对其进行排序，年份大的往后冒泡
+				temp=p[j];
+				p[j]=p[j+1];
+				p[j+1]=temp;     //这里需要注意的是，temp是一个结构体变量，不能像往常一样将其定义成整型常量
+		}
+				
+	}
+	printf("After sorted:\n");
+	for(i=0;i<n;i++){
+		printf("%s %s %d %d %d\n",p[i].name, p[i].phone, p[i].birth.year, p[i].birth.month, p[i].birth.day);  //输出
+	}
+	return 0;
+}
