@@ -1,0 +1,36 @@
+题目：自定义函数，计算并返回年year、月month和日day对应的是该年的第几天。
+例如：(2000.3.1)返回61
+     (1981.3.1)返回60
+     
+
+#include <stdio.h>
+int day_of_day(int year,int month,int day)
+{
+	int k,leap;
+	int tab[2][13]={
+		{0,31,28,31,30,31,30,31,31,30,31,30,31},       //数组初始化，将每月的天数赋给数组
+		{0,31,29,31,30,31,30,31,31,30,31,30,31}
+	};
+	leap=(year%4==0 && year%100!=0 || year%400==0);    //判断是否为闰年，是闰年，则leap=1，反之，leap=0
+
+	for(k=1;k<month;k++)
+		day=day+tab[leap][k];     //计算天数
+
+	return day;
+}
+int main()
+{
+	int year,month,day,days;
+
+	printf("please input year:\n");
+	scanf("%d",&year);
+	printf("please input month:\n");
+	scanf("%d",&month);
+	printf("please input day:\n");
+	scanf("%d",&day);
+
+	days=day_of_day(year,month,day);      
+
+	printf("number of days = %d\n",days);     //输出结果
+	return 0;
+}
