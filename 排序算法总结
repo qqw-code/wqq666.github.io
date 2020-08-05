@@ -1,0 +1,91 @@
+1.冒泡排序
+　　基本思想：比较相邻的两个数，如果前者比后者大，则进行交换。每一轮排序结束，选出一个未排序中最大的数放到数组后面。
+
+代码:
+void bubbleSort(int *arr, int n) {
+    for (int i = 0; i<n - 1; i++)
+        for (int j = 0; j < n - i - 1; j++)
+        {
+            //如果前面的数比后面大，进行交换
+            if (arr[j] > arr[j + 1]) {
+                int temp = arr[j]; arr[j] = arr[j + 1]; arr[j + 1] = temp;
+            }
+        }
+}
+
+
+2.快速排序
+　　基本思想:选取一个基准元素，通常为数组最后一个元素（或者第一个元素）。
+    	     从前向后遍历数组，当遇到小于基准元素的元素时，把它和左边第一个大于基准元素的元素进行交换。
+	     在利用分治策略从已经分好的两组中分别进行以上步骤，直到排序完成。下图表示了这个过程。
+
+
+代码：
+	//分治法把数组分成两份
+int patition(int *a, int left,int right) {
+    int j = left;    //用来遍历数组
+    int i = j - 1;    //用来指向小于基准元素的位置
+    int key = a[right];    //基准元素
+    //从左到右遍历数组，把小于等于基准元素的放到左边，大于基准元素的放到右边
+    for (; j < right; ++j) {
+        if (a[j] <= key)
+            swap(&a[j], &a[++i]);
+    }
+    //把基准元素放到中间
+    swap(&a[right], &a[++i]);
+    //返回数组中间位置
+    return i;
+}
+//快速排序
+void quickSort(int *a,int left,int right) {
+    if (left>=right)
+        return;
+    int mid = patition(a,left,right);
+    quickSort(a, left, mid - 1);
+    quickSort(a, mid + 1, right);
+}
+
+
+
+3.选择排序法
+    基本思想：依次选出数组最小的数放到数组的前面。首先从数组的第二个元素开始往后遍历，找出最小的数放到第一个位置。
+	      再从剩下数组中找出最小的数放到第二个位置。以此类推，直到数组有序。
+
+代码：
+void SelectSort(int *a, int n) {
+    for (int i = 0; i < n; i++)
+    {
+        int key = i;    //临时变量用于存放数组最小值的位置
+        for (int j = i + 1; j < n; j++) {
+            if (a[j] < a[key]) {    
+                key = j;    //记录数组最小值位置
+            }
+        }
+            if (key != i)
+            {
+                int tmp = a[key]; a[key] = a[i]; a[i] = tmp;    //    交换最小值
+            }
+        
+    }
+}
+
+
+4.插入排序
+　　基本思想：和交换排序不同的是它不用进行交换操作，而是用一个临时变量存储当前值。
+	      当前面的元素比后面大时，先把后面的元素存入临时变量，前面元素的值放到后面元素位置，再到最后把其值插入到合适的数组位置。
+
+void InsertSort(int  *a, int n) {
+    int tmp = 0;
+    for (int i = 1; i < n; i++) {
+        int j = i - 1;
+        if (a[i] < a[j]) {
+            tmp = a[i];
+            a[i] = a[j];
+            while (tmp < a[j-1]) {
+                a[j] = a[j-1];
+                j--;
+            }
+            a[j] = tmp;
+        }
+    }
+}
