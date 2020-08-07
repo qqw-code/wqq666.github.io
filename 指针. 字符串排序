@@ -1,0 +1,42 @@
+题目:输入5个字符串，按从小到大的顺序输出。试编写程序。
+
+代码：
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+ 
+void sort(char * str[],int size)
+{
+    int i,j;
+    char *temp;
+    for(i=0;i<size-1;i++)
+    {
+        for(j=i+1;j<size;j++)
+        {
+            if(strcmp(str[i],str[j])>)      //字符串函数比较大小
+            {
+                temp=str[i];          //采用冒泡拍序
+                str[i]=str[j];
+                str[j]=temp;
+            }
+        }
+    }
+}
+ 
+ int main(void)
+{
+    char *p[5],str[5][20];          //定义一个指针数组和一个二维数组
+    int i,n=5;
+	printf("please input %d strings:\n",n);
+    for(i=0;i<n;i++)
+    {
+        scanf("%s",str[i]);     //将字符串存放在二维数组中
+        p[i]=str[i];      //将二维数组的值赋给指针数组
+    }
+    sort(p,n);
+    printf("After sorted:\n");
+    for(i=0;i<5;i++)
+        printf("%s\n",p[i]);
+    system("pause");
+    return 0;
+}
