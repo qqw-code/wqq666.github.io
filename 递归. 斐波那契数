@@ -1,0 +1,23 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <stdio.h>
+#include <stdlib.h>
+int fibonacci(int n)
+{
+	if(n <= 2)
+	{
+		return 1;
+	}
+	else
+	{
+	    return fibonacci(n - 1) + fibonacci(n - 2);
+    }
+}
+int main()
+{
+	int n;
+	printf("请输入你想输出第几项的斐波那契数：\n");
+	scanf("%d", &n);
+	printf("%d\n", fibonacci(n));
+	system("pause");
+	return 0;
+}
