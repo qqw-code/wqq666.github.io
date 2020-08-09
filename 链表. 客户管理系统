@@ -1,0 +1,392 @@
+#include <stdio.h>
+#include<stdlib.h>
+#define FILENAME "kuhuguanli.dat"
+struct MyNode{
+	int ID;
+	char name[40];
+	int age;
+	char sex[10];
+	char phone[15];
+	struct MyNode* next;
+};
+typedef struct MyNode kehu;
+void showMainMenu(void);
+kehu *Createkehu(void);
+void WriteToFile(kehu *head);
+int Check(kehu *head, int ID);
+void Display(kehu *head);
+kehu *ReadFile(void);
+void InputRecord(kehu *head);
+kehu *FindbyID(kehu *head, int ID);
+void FindbyID(kehu *head);
+void Updatekehu(kehu *head);
+kehu *Deletekehu(kehu *head);
+void DeleteRecord(kehu *head);
+
+int main(void)
+{
+    int choice, x=1;
+    kehu *head;
+
+    while( x!=0 )
+    {
+        showMainMenu();
+        scanf("%d",&choice);
+        system("cls");
+        switch(choice)
+        {
+            case  0: //退出
+                x=0;
+                DeleteRecord(head);
+                break;
+
+            case 1:  //录入
+                printf("请录入客户信息，以-1结束\n");
+                head = Createkehu();
+                if( NULL == head )
+                    break;
+                WriteToFile(head);
+                printf("存盘成功\n");
+                break;
+
+            case 2:
+                head = ReadFile();
+                if( NULL == head )
+                {
+                    printf("文件为空，需要录入图书!\n");
+                }else{
+                    InputRecord(head);
+                    WriteToFile(head);
+                    printf("新增：存盘成功\n");
+                }
+                break;
+            case 3: //删除
+                head = ReadFile();
+                if( NULL == head )
+                {
+                    printf("文件为空，需要录入客户信息\n");
+                }else{
+                    head = Deletekehu(head);
+                    WriteToFile(head);
+                    printf("删除：存盘成功\n");
+                }
+                break;
+            case 4:  //列表
+                head = ReadFile();
+                if( NULL == head )
+                {
+                    printf("文件为空，需要录入客户信息\n");
+                }else{
+                    Display(head);
+                }
+                break;
+
+            case 5:  //查询
+                head = ReadFile();
+                if( NULL == head )
+                {
+                    printf("文件为空，需要录入客户信息\n");
+                }else{
+                    FindbyID(head);
+                }
+                break;
+            case 6: //修改
+                head = ReadFile();
+                if( NULL == head )
+                {
+                    printf("文件为空，需要录入客户信息\n");
+                }else{
+                    Updatekehu(head);
+                    WriteToFile(head);
+                    printf("修改：存盘成功\n");
+                }
+                break;
+
+            default:
+                printf("输入错误\n");
+                break;
+        }
+        fflush(stdin);
+        getchar();
+
+    }
+
+    return 0;
+}
+
+void showMainMenu(void)
+{
+		system("cls");
+		printf("                             ------------------\n");
+		printf("                             *客户信息管理系统*\n");
+		printf("                             ------------------\n\n");
+		printf("               **********************************************\n\n");
+		printf("               **********************************************\n\n");
+		printf("               * 1-信息录入                       2-添加客户信息  *\n\n");
+		printf("               * 3-删除客户信息                   4-客户信息列表  *\n\n");
+		printf("               * 5-查询客户信息                   6-修改客户信息  *\n\n");
+		printf("               * 0-退出系统                                 *\n\n");
+		printf("               **********************************************\n\n");
+		printf("               **********************************************\n\n");
+		printf("请输入您所需的功能编号:");
+}
+
+kehu *Createkehu(void)
+{
+    kehu *head, *tail, *pnew;
+	int ID; 
+
+    head = NULL;
+    while(1)
+    {
+        do{
+            printf("请输入ID号:");
+            fflush(stdin);
+            scanf("%d",&ID);
+            if( -1 == ID )
+                return head;
+        }while( Check(head,ID) == 1 );
+        pnew = (kehu *)malloc(sizeof(kehu));
+        pnew->ID = ID;
+        printf("请输入客户名字:");
+        scanf("%s",pnew->name);
+        printf("请输入客户年龄:");
+        scanf("%d",&pnew->age);
+        printf("请输入客户性别:");
+        scanf("%s",pnew->sex);
+		printf("请输入客户手机号码:");
+		scanf("%s",pnew->phone);
+        pnew->next = NULL;
+        if( NULL == head)
+            head = pnew;
+        else
+            tail->next = pnew;
+        tail = pnew;
+    }
+    return head;
+}
+int Check(kehu *head, int ID)
+{
+    kehu *p = head;
+    while( p!=NULL)
+    {
+        if ( p->ID == ID )
+        {
+            printf("您输入的ID重复!\n");
+            return 1;
+        }
+        p = p->next;
+    }
+    return 0;
+}
+
+void WriteToFile(kehu *head)
+{
+    FILE *fp;
+    kehu *p;
+    fp = fopen( FILENAME, "wb" );
+    if( NULL == fp )
+    {
+        printf("WriteFile fopen fail\n");
+        fclose(fp);
+        return;
+    }
+    p = head;
+    while(p!=NULL)
+    {
+        fwrite(p,sizeof(kehu),1,fp);
+        p=p->next;
+    }
+    fclose(fp);
+    return;
+}
+
+void Display(kehu *head)
+{
+    kehu *p = head;
+    if( NULL ==  head)
+    {
+        printf("Display 链表为空\n");
+        return;
+    }
+    printf("                                客户信息列表如下\n");
+	printf("            ==========================================================\n");
+	printf("            ID        姓名       年龄    性别   手机号码        \n");
+	while( p!=NULL )
+    {
+        printf("d%10s%d%10s%10s\n",p->ID,p->name,p->age,p->sex,p->phone);
+        p = p->next;
+    }
+
+    printf("            ==========================================================\n");
+    return;
+}
+
+kehu *ReadFile(void)
+{
+    kehu *head = NULL, *pnew, *tail;
+    FILE *fp;
+
+    fp = fopen(FILENAME, "rb");
+    if( NULL == fp )
+    {
+        printf("ReadFile fopen fail\n");
+        return head;
+    }
+    while( !feof(fp) )
+    {
+        pnew = (kehu *)malloc(sizeof(kehu));
+        if( fread(pnew, sizeof(kehu),1,fp ) > 0 )
+        {
+            pnew->next = NULL;
+            if( NULL == head )
+                head =pnew;
+            else
+                tail->next = pnew;
+            tail = pnew;
+
+        }else{
+            free(pnew);
+        }
+    }
+    fclose(fp);
+    return head;
+}
+void InputRecord(kehu *head)
+{
+    int ID;
+    kehu *pnew, *tail;
+
+    do{
+        printf("请输入新增客户信息的ID:");
+        scanf("%d",&ID);
+        if( -1 == ID )
+        {
+            printf("您输入的编号是-1,无法新增\n");
+            return;
+        }
+    }while( Check(head, ID) == 1  );
+    pnew = (kehu *)malloc(sizeof(kehu));
+    pnew->ID = ID;
+    printf("请输入新增客户的姓名::");
+    scanf("%s",pnew->name);
+    printf("请输入新增客户的年龄:");
+    scanf("%d",&pnew->age);
+    printf("请输入新增客户的性别:");
+    scanf("%s",pnew->sex);
+	printf("请输入新增客户的手机号码:");
+	scanf("%s",pnew->phone);
+    pnew->next = NULL;
+    tail = head;
+    while( tail->next != NULL )
+    {
+        tail = tail->next;
+    }
+    tail->next = pnew;
+    return;
+}
+kehu *FindbyID(kehu *head, int ID)
+{
+    kehu *p = head;
+
+    while( p!= NULL )
+    {
+        if( p->ID == ID)
+            return p;
+        p = p->next;
+    }
+    return NULL;
+}
+void FindbyID(kehu *head)
+{
+    int ID;
+    kehu *p;
+
+    printf("请输入要查找的客户ID:");
+    scanf("%d", &ID);
+    p = FindbyID(head, ID);
+    if( NULL == p)
+    {
+        printf("没有您输入的ID的客户\n");
+        return;
+    }
+    printf("                        你所查询的客户信息如下\n");
+	printf(" =========================================================================\n");
+	printf(" **   ID        姓名      年龄       性别      手机号码  **\n");
+	printf(" **    %d        %s        %d        %s         %s       **\n",p->ID,p->name,p->age,p->sex,p->phone);
+	printf(" =========================================================================\n");
+}
+
+void Updatekehu(kehu *head)
+{
+    kehu *p;
+    int ID,new_ID;
+    printf("请输入待修改的客户ID:");
+    scanf("%d",&ID);
+    p = FindbyID(head, ID);
+    if( NULL == p)
+    {
+        printf("没有该ID的客户，无法修改\n");
+        return;
+    }
+    do{
+        printf("请输入更改后的ID号:");
+        scanf("%d",&new_ID);
+        if( -1 == new_ID )
+        {
+            printf("编号不能为-1，退出\n");
+            return;
+        }
+    }while( Check(head, new_ID)==1 );
+
+    p->ID = new_ID;
+    printf("请输入更改后的客户姓名:");
+    scanf("%s",p->name);
+    printf("请输入更改后的客户年龄:");
+    scanf("%d",&p->age);
+    printf("请输入修改后的客户性别:");
+    scanf("%s",p->sex);
+	printf("请输入更改后的客户手机号码:");
+	scanf("%s",p->phone);
+    return;
+}
+kehu *Deletekehu(kehu *head)
+{
+    kehu  *p, *prev;
+    int ID;
+    printf("请输入待删除的客户ID:");
+    scanf("%d",&ID);
+    p = FindbyID(head, ID);
+    if( NULL == p)
+    {
+        printf("没有该ID的客户，无法删除\n");
+        return 0;
+    }
+    if( p == head )
+    {
+        head = p->next;
+        free(p);
+        return head;
+    }
+    prev = head;
+    while( prev->next != p  )
+    {
+        prev = prev->next;
+    }
+    prev->next = p->next;
+    free(p);
+    return head;
+}
+
+void DeleteRecord(kehu *head)
+{
+    kehu *p;
+    p = head;
+    while(p!=NULL)
+    {
+        head = p->next;
+        free(p);
+        p = head;
+    }
+    return;
+}
