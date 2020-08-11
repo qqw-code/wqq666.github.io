@@ -1,0 +1,37 @@
+题目：统计一个数字在排序数组中出现的次数。
+
+示例 1:
+输入: nums = [5,7,7,8,8,10], target = 8
+输出: 2
+
+示例 2:
+输入: nums = [5,7,7,8,8,10], target = 6
+输出: 0
+
+代码:
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+	int i,n,target,count=0;
+	printf("Please input the length of a[]:\n");
+	scanf("%d",&n);
+
+	int* a=(int *)malloc(sizeof(int)*n);          //动态申请n个整型内存
+	printf("please input integers:\n");
+	for(i=0;i<n;i++)
+		scanf("%d",a+i);
+
+	printf("please input target:\n");
+	scanf("%d",&target);
+
+	for(i=0;i<n;i++)
+	{
+		if(a[i]==target)
+			count++;
+	}
+
+	printf("count=%d\n",count);
+	return 0;
+}
