@@ -1,0 +1,21 @@
+#include <stdio.h>
+int main(void)
+{
+	int i,flag=0,number=0;
+	char str[20];
+	printf("请输入一行字符串：");
+	gets(str);
+	for(i=0;str[i]!='\0';i++)
+	{
+		if(str[i]==' ')
+			flag=0;             //flag用来标记是否为空格
+		else 
+			if(flag==0)
+			{
+				flag=1;
+				number++;
+			} 
+	}	
+	printf("有单词%d\n",number);
+	return 0;
+}
